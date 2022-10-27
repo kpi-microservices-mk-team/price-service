@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: price-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-service
+  template:
+    metadata:
+      labels:
+        app: price-service
+    spec:
+      containers:
+        - image: makstrexa/price-service:1.0.2
+          imagePullPolicy: Always
+          name: price-service
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: price-service-config

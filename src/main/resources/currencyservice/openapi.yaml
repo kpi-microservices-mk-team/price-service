@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: My test
+  description: My test description
+  version: 1.0.0
+
+paths:
+  /api/v1/rates:
+    get:
+      tags:
+        - get-rates
+      summary: Get rates to USD
+      operationId: getRates
+      responses:
+        '200':
+          description: Get rates successful
+          content:
+            application/json:
+              schema:
+                $ref: 'dto/CurrencyRate.yaml'
+    post:
+      tags:
+        - update-rate
+      summary: Update specific rate for spec date
+      operationId: updateRate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'postdto/UpdateRate.yaml'
+      responses:
+        '200':
+          description: Update rate successful
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+  /api/v1/rates/convert:
+    get:
+      tags:
+        - convert-rates
+      summary: Convert rates
+      operationId: convertRates
+      parameters:
+        - in: query
+          name: target
+          schema:
+            type: string
+          description: Target currency
+        - in: query
+          name: from
+          schema:
+            type: string
+          description: From currency
+        - in: query
+          name: value
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: Get rates successful
+          content:
+            application/json:
+              schema:
+                $ref: 'dto/ConvertedRates.yaml'

@@ -1,0 +1,10 @@
+type: object
+properties:
+  date:
+    type: string
+    format: date
+  rates:
+    type: object
+    additionalProperties:
+      type: number
+      format: double

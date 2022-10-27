@@ -1,0 +1,11 @@
+type: object
+properties:
+  target:
+    type: string
+  value:
+    type: number
+    format: double
+
+required:
+  - target
+  - from

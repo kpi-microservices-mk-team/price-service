@@ -1,0 +1,9 @@
+type: object
+properties:
+    rateDate:
+      type: string
+      format: date
+      pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      example: "2019-05-17"
+    currency:
+      type: string
