@@ -13,7 +13,7 @@ spec:
         app: price-service
     spec:
       containers:
-        - image: makstrexa/price-service:1.0.2
+        - image: makstrexa/price-service:1.0.5
           imagePullPolicy: Always
           name: price-service
           ports:

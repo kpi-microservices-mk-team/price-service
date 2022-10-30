@@ -1,0 +1,11 @@
+type: object
+properties:
+  productId:
+    type: integer
+  price:
+    type: number
+    format: double
+
+required:
+  - productId
+  - price

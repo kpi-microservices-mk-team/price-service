@@ -1,0 +1,11 @@
+type: object
+properties:
+  price:
+    type: number
+    format: double
+  currency:
+    type: string
+
+required:
+  - price
+  - currency

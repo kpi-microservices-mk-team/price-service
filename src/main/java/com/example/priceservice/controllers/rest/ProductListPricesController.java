@@ -3,20 +3,24 @@ package com.example.priceservice.controllers.rest;
 import com.example.priceservice.controllers.rest.mapper.ProductPriceMapper;
 import com.example.priceservice.services.ProductPriceProvider;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.api.ProductPriceApi;
+import org.openapitools.api.ProductListPricesApi;
 import org.openapitools.model.ProductPriceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-public class ProductPriceController implements ProductPriceApi {
+public class ProductListPricesController implements ProductListPricesApi {
 
     private final ProductPriceProvider productPriceProvider;
 
     @Override
-    public ResponseEntity<ProductPriceDto> getProductPrice(Integer productId, String currencyCode) {
-        final var productPrice = productPriceProvider.provideProductPrice(productId, currencyCode.toLowerCase());
-        return ResponseEntity.ok(ProductPriceMapper.toResponseDto(productPrice));
+    public ResponseEntity<List<ProductPriceDto>> getProductListPrices(String currencyCode, List<Integer> requestBody) {
+        final var productPrices = productPriceProvider.provideAllProductPrices(requestBody, currencyCode.toLowerCase());
+        return ResponseEntity.ok(
+                ProductPriceMapper.toResponseDtoList(productPrices)
+        );
     }
 }

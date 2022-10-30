@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Price service rest
+  description: Price microservice endpoints
+  version: 1.0.0
+
+paths:
+  /api/v1/product-price/{productId}/{currencyCode}:
+    get:
+      tags:
+        - product-price
+      summary: Get price for one product
+      operationId: getProductPrice
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+          required: true
+          description: Product ID
+        - in: path
+          name: currencyCode
+          schema:
+            type: string
+          required: true
+          description: Requested currency code
+      responses:
+        '200':
+          description: Get product price successful
+          content:
+            application/json:
+              schema:
+                $ref: 'dto/ProductPrice.yaml'
+  /api/v1/product-price-list/{currencyCode}:
+    post:
+      tags:
+        - product-list-prices
+      summary: Get price for list of products
+      operationId: getProductListPrices
+      parameters:
+        - in: path
+          name: currencyCode
+          schema:
+            type: string
+          required: true
+          description: Requested currency code
+      requestBody:
+        description: List of product ids
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+      responses:
+        '200':
+          description: Get product list prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'dto/ProductPrice.yaml'
+  /api/v1/product-price/{productId}:
+    put:
+      tags:
+        - update-product-price
+      summary: Update price for one product
+      operationId: updateProductPrice
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+          required: true
+          description: Product ID
+      requestBody:
+        description: Price with currency
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'dto/ProductPriceWithCurrency.yaml'
+      responses:
+        '200':
+          description: Price for product created
+    post:
+      tags:
+        - post-product-price
+      summary: Post price for one product
+      operationId: postProductPrice
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+          required: true
+          description: Product ID
+      requestBody:
+        description: Price with currency
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'dto/ProductPriceWithCurrency.yaml'
+      responses:
+        '200':
+          description: Price for product created
+    delete:
+      tags:
+        - delete-product-price
+      summary: Delete price for one product
+      operationId: deleteProductPrice
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+          required: true
+          description: Product ID
+      responses:
+        '200':
+          description: Successfully delete price for product

@@ -2,11 +2,10 @@ plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
-	id "org.openapi.generator" version "6.0.0"
 }
 
 group = 'com.example'
-version = '1.0.2-SNAPSHOT'
+version = '1.0.5-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
@@ -22,95 +21,14 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'javax.validation:validation-api:2.0.1.Final'
-	implementation 'org.openapitools:jackson-databind-nullable:0.2.3'
 	implementation 'io.springfox:springfox-swagger2:3.0.0'
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'org.flywaydb:flyway-core:9.5.1'
-	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+	implementation project(':currency-service-integration')
+	implementation project(':price-service-rest')
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
-def spec = "$projectDir/src/main/resources/currencyservice/openapi.yaml".toString()
-def generatedSourcesDir = "$projectDir/generated-src".toString()
-
-openApiGenerate {
-	generatorName.set("java")
-	generateApiDocumentation.set(false)
-	inputSpec = spec
-	outputDir = generatedSourcesDir
-	modelNameSuffix.set("Dto")
-	generateModelTests = false
-	generateApiTests = false
-	generateApiDocumentation = false
-	generateModelDocumentation = false
-	library = "resttemplate"
-
-	configOptions = [
-			useTags                : 'true',
-			dateLibrary            : 'java8',
-			interfaceOnly          : 'true',
-			skipDefaultInterface   : 'true',
-			useApiIgnore           : 'false',
-			swaggerAnnotations     : 'true',
-			hideGenerationTimestamp: "true",
-			implicitHeaders        : "true"
-	]
-	globalProperties = [
-			apis     : '',
-			models   : '',
-			supportingFiles: ''
-	]
-
-}
-
-tasks.openApiGenerate {
-	doLast {
-		delete (
-				"$rootDir/generated-src/.openapi-generator",
-				"$rootDir/generated-src/api",
-				"$rootDir/generated-src/gradle",
-				"$rootDir/generated-src/docs",
-				"$rootDir/generated-src/.github",
-				"$rootDir/generated-src/.openapi-generator",
-				"$rootDir/generated-src/src/main/AndroidManifest.xml",
-				"$rootDir/generated-src/.gitignore",
-				"$rootDir/generated-src/.openapi-generator-ignore",
-				"$rootDir/generated-src/.travis.yml",
-				"$rootDir/generated-src/build.gradle",
-				"$rootDir/generated-src/build.sbt",
-				"$rootDir/generated-src/git_push.sh",
-				"$rootDir/generated-src/gradle.properties",
-				"$rootDir/generated-src/gradlew",
-				"$rootDir/generated-src/gradlew.bat",
-				"$rootDir/generated-src/pom.xml",
-				"$rootDir/generated-src/README.md",
-				"$rootDir/generated-src/settings.gradle",
-		)
-	}
-}
-
-openApiValidate {
-	inputSpec = spec
-}
-
-tasks.openApiGenerate.dependsOn tasks.openApiValidate
-
-compileJava.dependsOn tasks.openApiGenerate
-
-tasks.named('test') {
-	useJUnitPlatform()
-}
-
-sourceSets {
-	getByName("main") {
-		java {
-			srcDir("$generatedSourcesDir/src/main/java")
-		}
-	}
-}
-
